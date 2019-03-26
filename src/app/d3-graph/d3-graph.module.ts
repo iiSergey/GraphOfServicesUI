@@ -20,6 +20,9 @@ import { ZoomableOfDirective } from './directives/zoomable-of.directive';
   ],
   providers: [
     D3GraphService
+  ],
+  exports: [
+    GraphComponent,
   ]
 })
 export class D3GraphModule {
