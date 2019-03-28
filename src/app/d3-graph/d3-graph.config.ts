@@ -17,5 +17,6 @@ export const SimulationNodeSetting = {
 export const ForceDirectedGraphSetting = {
   LINKS: 1 / 50,
   COLLISION: 1,
-  CHARGE: -1
+  CHARGE: -1,
+  DISTANCE: 50,
 };
