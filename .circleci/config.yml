@@ -75,21 +75,24 @@ jobs:
             - run:
                 name: Setting Signature Version 4 for S3 Request Authentication
                 command: aws configure set default.s3.signature_version s3v4
+            - run:
+                name: Enable cloudfront for aws
+                command: aws configure set preview.cloudfront true
             # Deploy to the S3 bucket corresponding to the current branch
             - run:
                 name: Deploy to S3
                 command: |
                     if [ "${CIRCLE_BRANCH}" == "develop" ]; then
                         aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
-                        aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
                     elif [ "${CIRCLE_BRANCH}" == "master" ]; then
                         aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
-                        aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
                     else
                         # remove after test
                         aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
-                        aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
                     fi
+            - run:
+                name: regresh cache for cloudfront
+                command: aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
 workflows:
     version: 2
     # The build and deploy workflow
