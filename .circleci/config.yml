@@ -52,3 +52,65 @@ jobs:
                 key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
                 paths:
                     - dist
+    # The deploy job
+    deploy:
+        working_directory: ~/project
+        docker:
+            - image: circleci/node:latest-browsers
+        steps:
+            # Log the current branch
+            - run:
+                name: Show current branch
+                command: echo ${CIRCLE_BRANCH}
+            # Restore cache from the build job which contains the
+            # dist folder that needs to be deployed
+            - restore_cache:
+                key: v1-dist-{{ .Environment.CIRCLE_BRANCH }}-{{ .Environment.CIRCLE_SHA1 }}
+            # Install AWS cli
+            - run:
+                name: Install aws cli
+                command:
+                    sudo apt-get -y -qq install awscli
+            # Set the signature version for the S3 auth
+            - run:
+                name: Setting Signature Version 4 for S3 Request Authentication
+                command: aws configure set default.s3.signature_version s3v4
+            # Deploy to the S3 bucket corresponding to the current branch
+            - run:
+                name: Deploy to S3
+                command: |
+                    if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+                        aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
+                        aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
+                    elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+                        aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
+                        aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
+                    else
+                        # remove after test
+                        aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
+                        aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
+                    fi
+workflows:
+    version: 2
+    # The build and deploy workflow
+    build_and_deploy:
+        jobs:
+            - build:
+                filters:
+                    branches:
+                        only:
+                            - /^feature.*/
+                            - develop
+                            - master
+            # The deploy job will only run on the filtered branches and
+            # require the build job to be successful before it starts
+            - deploy:
+                requires:
+                    - build
+                filters:
+                    branches:
+                        only:
+                            # remove after test
+                            - /^feature.*/
+                            - develop
+                            - master
