@@ -13,6 +13,10 @@ jobs:
             - run:
                 name: Show current branch
                 command: echo ${CIRCLE_BRANCH}
+            - run:
+                # TODO remove this section
+                name: test CLOUDFRONT_DISTRIBUTION_ID
+                command: echo ${CLOUDFRONT_DISTRIBUTION_ID}
             # Restore local dependencies from cache
             - restore_cache:
                 keys:
@@ -86,13 +90,10 @@ jobs:
                         aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
                     elif [ "${CIRCLE_BRANCH}" == "master" ]; then
                         aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
-                    else
-                        # remove after test
-                        aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
                     fi
             - run:
-                name: regresh cache for cloudfront
-                command: aws cloudfront create-invalidation --distribution-id E33N2840223WOP --paths '/*'
+                name: refresh cache for cloudfront
+                command: aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths '/*'
 workflows:
     version: 2
     # The build and deploy workflow
@@ -113,7 +114,5 @@ workflows:
                 filters:
                     branches:
                         only:
-                            # remove after test
-                            - /^feature.*/
                             - develop
                             - master
