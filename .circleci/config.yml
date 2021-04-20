@@ -73,11 +73,8 @@ workflows:
                 - develop
                 - master
       - deploy:
-          context: vault
           requires:
             - build
           filters:
-            branches:
-              only:
-                - develop
-                - master
+            tags:
+              only: /.*/
