@@ -53,9 +53,9 @@ jobs:
           name: Deploy to S3
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ]; then
-                aws --region eu-central-1 s3 sync /dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
+                aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
             elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-                aws --region eu-central-1 s3 sync /dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
+                aws --region eu-central-1 s3 sync dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
             fi
       - run:
           name: refresh cache for cloudfront
