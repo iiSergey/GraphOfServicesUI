@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { ForceDirectedGraph } from '../models/force-directed-graph';
 import { D3GraphService } from '../d3-graph.service';
+import { Node } from '../models/node';
+import { Link } from '../models/link';
 
 @Component({
   selector: 'app-graph',
@@ -22,18 +24,18 @@ import { D3GraphService } from '../d3-graph.service';
       </g>
     </svg>
   `,
-  styleUrls: ['./graph.component.scss']
+  styleUrls: ['./graph.component.less']
 })
 export class GraphComponent implements OnInit, AfterViewInit {
-  @Input() nodes;
-  @Input() links;
-  graph: ForceDirectedGraph;
-  private graphOptions: { width, height } = { width: 800, height: 600 };
+  @Input() nodes!: Node[];
+  @Input() links!: Link[];
+  graph!: ForceDirectedGraph;
+  private graphOptions = { width: 800, height: 600 };
 
   constructor(private d3GraphService: D3GraphService, private ref: ChangeDetectorRef) {
   }
 
-  get options() {
+  get options(): { width: number, height: number } {
     return this.graphOptions = {
       width: window.innerWidth,
       height: window.innerHeight
@@ -41,11 +43,11 @@ export class GraphComponent implements OnInit, AfterViewInit {
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.graph.initSimulation(this.options);
+  onResize(): void {
+    this.graph.refreshSimulation(this.options);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     /** Receiving an initialized simulated graph from our custom d3 service */
     this.graph = this.d3GraphService.getForceDirectedGraph(this.nodes, this.links, this.options);
 
@@ -54,12 +56,12 @@ export class GraphComponent implements OnInit, AfterViewInit {
      * This improves scripting computation duration in a couple of tests I've made, consistently.
      * Also, it makes sense to avoid unnecessary checks when we are dealing only with simulations data binding.
      */
-    this.graph.ticker.subscribe((d) => {
+    this.graph.ticker.subscribe(() => {
       this.ref.markForCheck();
     });
   }
 
-  ngAfterViewInit() {
-    this.graph.initSimulation(this.options);
+  ngAfterViewInit(): void {
+    this.graph.refreshSimulation(this.options);
   }
 }

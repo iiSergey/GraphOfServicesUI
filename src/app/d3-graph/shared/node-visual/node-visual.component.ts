@@ -20,8 +20,8 @@ import { Node } from '../../models/node';
       </svg:text>
     </svg:g>
   `,
-  styleUrls: ['./node-visual.component.scss']
+  styleUrls: ['./node-visual.component.less']
 })
 export class NodeVisualComponent {
-  @Input() appNodeVisual: Node;
+  @Input() appNodeVisual!: Node;
 }

@@ -11,10 +11,10 @@ import { Link } from '../../models/link';
       [attr.y1]="appLinkVisual.source.y"
       [attr.x2]="appLinkVisual.target.x"
       [attr.y2]="appLinkVisual.target.y"
-    ></svg:line>
+    />
   `,
-  styleUrls: ['./link-visual.component.scss']
+  styleUrls: ['./link-visual.component.less']
 })
 export class LinkVisualComponent {
-  @Input() appLinkVisual: Link;
+  @Input() appLinkVisual!: Link;
 }

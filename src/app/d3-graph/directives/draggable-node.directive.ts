@@ -7,13 +7,13 @@ import { D3GraphService } from '../d3-graph.service';
   selector: '[appDraggableNode]'
 })
 export class DraggableNodeDirective implements OnInit {
-  @Input() appDraggableNode: Node;
-  @Input() appDraggableInGraph: ForceDirectedGraph;
+  @Input() appDraggableNode!: Node;
+  @Input() appDraggableInGraph!: ForceDirectedGraph;
 
   constructor(private d3Service: D3GraphService, private elementOfDraggable: ElementRef) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.d3Service.applyDraggableBehaviour(this.elementOfDraggable.nativeElement, this.appDraggableNode, this.appDraggableInGraph);
   }
 }
