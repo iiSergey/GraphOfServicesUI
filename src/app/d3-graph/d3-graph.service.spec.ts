@@ -10,7 +10,7 @@ describe('D3GraphService', () => {
   }));
 
   it('should be created', () => {
-    const service: D3GraphService = TestBed.get(D3GraphService);
+    const service: D3GraphService = TestBed.inject(D3GraphService);
     expect(service).toBeTruthy();
   });
 });

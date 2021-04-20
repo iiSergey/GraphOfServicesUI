@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { LinkVisualComponent } from './link-visual.component';
 import { Node } from '../../models/node';
@@ -26,7 +26,7 @@ class TestHostComponent {
     this.link = new Link(nodeFirst, nodeSecond);
   }
 
-  setInput(newLink: Link) {
+  setInput(newLink: Link): void {
     this.link = newLink;
   }
 }
@@ -34,7 +34,7 @@ class TestHostComponent {
 describe('LinkVisualComponent', () => {
   let testHostComponent: TestHostComponent;
   let testHostFixture: ComponentFixture<TestHostComponent>;
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [LinkVisualComponent, TestHostComponent]
     })

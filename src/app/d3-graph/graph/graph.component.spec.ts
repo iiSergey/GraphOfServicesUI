@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { GraphComponent } from './graph.component';
 import { LinkVisualComponent } from '../shared/link-visual/link-visual.component';
@@ -32,7 +32,7 @@ class TestHostComponent {
     this.nodes = [nodeFirst, nodeSecond];
   }
 
-  setInput(links: Link[], nodes: Node[]) {
+  setInput(links: Link[], nodes: Node[]): void {
     this.links = links;
     this.nodes = nodes;
   }
@@ -43,7 +43,7 @@ describe('GraphComponent', () => {
   let testHostComponent: TestHostComponent;
   let testHostFixture: ComponentFixture<TestHostComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [
         TestHostComponent,
