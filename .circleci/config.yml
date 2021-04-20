@@ -1,0 +1,83 @@
+---
+
+version: 2.1
+
+node-image: &node-image
+  docker:
+    - image: circleci/node:latest-browsers
+
+jobs:
+  build:
+    <<: *node-image
+    steps:
+      - checkout
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Linting
+          command: npm run lint
+      - run:
+          name: Testing
+          command: npm run test:ci
+      - run:
+          name: Building
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+                NODE_ENV='production' npm run build-prod
+            elif [ "${CIRCLE_BRANCH}" == "develop" ]; then
+                npm run build-dev
+            else
+                npm run build
+            fi
+  deploy:
+    <<: *node-image
+    steps:
+      - run:
+          name: Show current branch
+          command: echo ${CIRCLE_BRANCH}
+      - run:
+          name: Install aws cli
+          command:
+            sudo apt-get -y -qq install awscli
+      - run:
+          name: Setting Signature Version 4 for S3 Request Authentication
+          command: aws configure set default.s3.signature_version s3v4
+      - run:
+          name: Enable cloudfront for aws
+          command: aws configure set preview.cloudfront true
+      - run:
+          name: Deploy to S3
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "develop" ]; then
+                aws --region eu-central-1 s3 sync /tmp/workspace/dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
+            elif [ "${CIRCLE_BRANCH}" == "master" ]; then
+                aws --region eu-central-1 s3 sync /tmp/workspace/dist/GraphOfServices s3://iivashchenko.pp.ua/ --delete
+            fi
+      - run:
+          name: refresh cache for cloudfront
+          command: aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_DISTRIBUTION_ID} --paths '/*'
+workflows:
+  version: 2
+  build-and-publish:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - /^fix-.*/
+                - /^feat-.*/
+                - develop
+                - master
+      - deploy:
+          context: vault
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+                - master
