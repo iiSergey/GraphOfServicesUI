@@ -65,8 +65,6 @@ workflows:
   build-and-publish:
     jobs:
       - build:
-          requires:
-            - secrets
           filters:
             branches:
               only:
