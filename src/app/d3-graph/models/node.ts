@@ -1,4 +1,5 @@
 import { SimulationNodeSetting } from '../d3-graph.config';
+import * as d3 from 'd3';
 
 export class Node implements d3.SimulationNodeDatum {
   // optional - defining optional implementation properties - required for relevant typing assistance
@@ -13,24 +14,24 @@ export class Node implements d3.SimulationNodeDatum {
   id: string;
   linkCount = 0;
 
-  constructor(id) {
-    this.id = id;
+  constructor(id: string|number) {
+    this.id = id.toString();
   }
 
-  get r() {
+  get r(): number {
     return 50 * this.normal() + 10;
   }
 
-  get fontSize() {
-    return (30 * this.normal() + 10) + 'px';
+  get fontSize(): string {
+    return `${30 * this.normal() + 10}px`;
   }
 
-  get color() {
+  get color(): string {
     const index = Math.floor(SimulationNodeSetting.SPECTRUM.length * this.normal());
     return SimulationNodeSetting.SPECTRUM[index];
   }
 
-  normal = () => {
+  private normal(): number {
     return Math.sqrt(this.linkCount / SimulationNodeSetting.N);
   }
 }
