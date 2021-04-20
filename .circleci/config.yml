@@ -35,6 +35,10 @@ jobs:
             else
                 npm run build
             fi
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - dist
   deploy:
     <<: *node-image
     steps:
