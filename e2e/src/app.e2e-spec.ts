@@ -8,9 +8,9 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', async () => {
+  it('should display main message', async () => {
     await page.navigateTo();
-    expect(await page.getTitleText()).toEqual('GraphOfServices app is running!');
+    expect(await page.getTitleText()).toEqual('Here are some graph:');
   });
 
   afterEach(async () => {
