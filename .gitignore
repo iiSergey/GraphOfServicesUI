@@ -32,3 +32,7 @@ yarn-error.log
 
 # User specific bazel settings
 .bazelrc.user
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out

@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Node } from '../../models/node';
 
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[appNodeVisual]',
   template: `
     <svg:g [attr.transform]="'translate(' + appNodeVisual.x + ',' + appNodeVisual.y + ')'">

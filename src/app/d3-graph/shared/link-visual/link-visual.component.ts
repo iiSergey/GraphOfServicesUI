@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Link } from '../../models/link';
 
 @Component({
-  // tslint:disable-next-line:component-selector
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[appLinkVisual]',
   template: `
     <svg:line

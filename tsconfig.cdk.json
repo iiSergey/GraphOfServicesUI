@@ -1,0 +1,35 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compilerOptions": {
+    "target": "ES2018",
+    "module": "commonjs",
+    "lib": ["es2018"],
+    "baseUrl": ".",
+    "paths": {
+      "#handlers/*": ["src/handlers/*"],
+      "#common/*": ["src/common/*"],
+      "#custom-types/*": ["src/types/*"],
+      "#constants": ["src/constants.ts"],
+      "#package": ["package.json"]
+    },
+    "declaration": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": false,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "typeRoots": ["./node_modules/@types"]
+  },
+  "exclude": ["cdk.out"],
+  "include": [
+    "src/**/*.cdk.ts"
+  ]
+}

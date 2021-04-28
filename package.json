@@ -1,6 +1,9 @@
 {
   "name": "graph-of-services",
   "version": "0.3.0",
+  "bin": {
+    "cdk": "bin/cdk.js"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +13,11 @@
     "test": "ng test",
     "test:ci": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "format": "prettier --write '**/*.{ts,js,json}' --ignore-path './.gitignore'",
+    "cdk": "cdk",
+    "synth:local": "cdk synth --no-staging > template.yaml",
+    "cleanup": "rimraf ./cdk.out/asset* && rimraf ./cdk.out/bundling-temp*"
   },
   "private": true,
   "dependencies": {
@@ -27,18 +34,38 @@
     "core-js": "^3.10.2",
     "d3": "^6.7.0",
     "rxjs": "~6.6.7",
+    "source-map-support": "^0.5.19",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.9",
+    "@angular-eslint/builder": "4.0.0",
+    "@angular-eslint/eslint-plugin": "4.0.0",
+    "@angular-eslint/eslint-plugin-template": "4.0.0",
+    "@angular-eslint/schematics": "4.0.0",
+    "@angular-eslint/template-parser": "4.0.0",
     "@angular/cli": "~11.2.9",
     "@angular/compiler-cli": "~11.2.10",
     "@angular/language-service": "~11.2.10",
+    "@aws-cdk/assert": "^1.100.0",
+    "@aws-cdk/aws-certificatemanager": "^1.100.0",
+    "@aws-cdk/aws-cloudfront": "^1.100.0",
+    "@aws-cdk/aws-iam": "^1.100.0",
+    "@aws-cdk/aws-lambda": "^1.100.0",
+    "@aws-cdk/aws-lambda-nodejs": "^1.100.0",
+    "@aws-cdk/aws-route53": "^1.100.0",
+    "@aws-cdk/aws-route53-patterns": "^1.100.0",
+    "@aws-cdk/aws-route53-targets": "^1.100.0",
+    "@aws-cdk/aws-s3-deployment": "^1.100.0",
+    "@aws-cdk/core": "^1.100.0",
     "@types/d3": "~6.3.0",
     "@types/jasmine": "~3.6.9",
     "@types/node": "~14.14.41",
-    "codelyzer": "~6.0.1",
+    "@typescript-eslint/eslint-plugin": "4.16.1",
+    "@typescript-eslint/parser": "4.16.1",
+    "aws-cdk": "1.96.0",
+    "eslint": "^7.6.0",
     "jasmine-core": "~3.7.1",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "~6.3.2",
@@ -47,9 +74,9 @@
     "karma-coverage-istanbul-reporter": "~3.0.3",
     "karma-jasmine": "~4.0.1",
     "karma-jasmine-html-reporter": "~1.5.4",
+    "prettier": "^2.2.1",
     "protractor": "~7.0.0",
     "ts-node": "~9.1.1",
-    "tslint": "~6.1.3",
     "typescript": "~4.1.0"
   }
 }
